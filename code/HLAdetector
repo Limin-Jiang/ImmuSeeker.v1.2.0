@@ -1,0 +1,137 @@
+
+#!/bin/bash
+
+#   ImmuSeeker
+#
+#   Authors:    Limin Jiang (lxj423@med.miami.edu)
+#   Date:       June 1, 2024
+#   Version:    0.1.0
+# Default values
+
+#######################################Software#########################################
+
+
+#for param in "${parameters[@]}"; do
+#    echo "$param"
+#done
+
+
+
+ref_dir="data"
+
+
+
+directory=$(dirname "$param_o")
+
+# Check the value of $param_i
+if [[ "$swithB" == "true" ]]; then
+	if samtools view -H "$param_i" | grep -qi -e "SN:chr6" -e "SN:Chr6"; then
+	  Chrlag="CHR"
+	else
+	  Chrlag=""
+	fi	
+
+	if [[ "$param_v" == "hg37" ]]; then		
+		echo "please make sure the version of genome is hg37...";
+		samtools view -b -h -L  data/"$Chrlag"gencode.v39.annotationhg37.gtf.HLA.bed  "$param_i"  >  "$param_o.bam"
+	else
+		echo "please make sure the version of genome is hg38...";
+		samtools view -b -h -L  data/"$Chrlag"gencode.v39.annotationhg38.gtf.HLA.bed  "$param_i"  >  "$param_o.bam"	
+	fi
+	samtools bam2fq "$param_o.bam" > "$param_o.fq"&&
+	rm "$param_o.bam"
+fi
+
+
+if [[ "$swithF" == "true" ]]; then
+	if echo "$param_i" | grep -q ','; then		
+		bowtie -v "$param_n" -a "${ref_dir}/hla_nuc"  -1 "$f1" -2 "$f2" -S "$param_o.sam"&&
+		echo "User inputs two FQ files"
+	else
+		bowtie --sam -v "$param_n" -a "${ref_dir}/hla_nuc"  "$param_i"  "$param_o.sam"&&	
+		echo "User inputs one FQ file"
+	fi	
+	samtools view -bS "$param_o.sam" > "$param_o.bam"&&
+	samtools bam2fq "$param_o.bam" > "$param_o.fq"&&
+	rm "$param_o.bam"&&
+	rm "$param_o.sam"	
+fi
+echo "Extracting high-quality reads (≥ ${param_q})..."
+
+awk '{
+  if(NR%4==1) id=$0;
+  if(NR%4==2) seq=$0;
+  if(NR%4==3) plus=$0;
+  if(NR%4==0) {
+	qual=$0;
+	sum=0;
+	for(i=1;i<=length(qual);i++) {
+	  q = substr(qual, i, 1);
+	  sum += ord = int(sprintf("%d", ord = index(" !\"#$%&'\''()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNO", q) + 32));
+	}
+	avg = sum / length(qual) - 33;
+
+	if(avg >= $param_q && !seen[seq]++) {
+	  print id"\n"seq"\n"plus"\n"qual;
+	}
+ }
+}' "$param_o.fq"> "$param_o.dedup.fq"&& 
+
+bowtie --sam -v "$param_n" -a "${ref_dir}/hla_nuc"  "$param_o.dedup.fq"   "$param_o.sam"&&
+
+echo "Calculating coverage for each allele..."
+samtools view -bS "$param_o.sam" > "$param_o.bam"&&		
+samtools sort "$param_o.bam" -o "$param_o.bam.sort.bam"&&
+samtools index "$param_o.bam.sort.bam"&&
+samtools depth -a "$param_o.bam.sort.bam" > "$param_o.depth.txt"&&
+rm "$param_o.bam.sort.bam.bai"&&
+rm "$param_o.bam.sort.bam"
+
+
+awk '
+{ 
+  total[$1]++                    # count total bases per reference
+  if ($3 > 0) covered[$1]++      # count covered bases per reference
+} 
+END {
+  printf "%-20s %-15s %-15s %-10s\n", "Reference", "Covered_Bases", "Total_Bases", "Percent"
+  for (ref in total) {
+	percent = (covered[ref]/total[ref])*100
+	printf "%-20s %-15d %-15d %.2f%%\n", ref, covered[ref], total[ref], percent
+  }
+}' "$param_o.depth.txt" | sort -k4 -n  > "${param_o}.coverage.txt"&&											
+			
+rm "$param_o.depth.txt"&&
+
+
+echo "Performing HLA genotype calling..."
+samtools view "$param_o.sam" | grep HLA |cut -d$'\t' -f 3,4,10 > "${param_o}.Nuc.txt"&&
+rm "$param_o.sam"&&
+Rscript  code/BamTocount_demorun.R -i "${param_o}" -c "${param_c}" -x "$param_ex" -q "$param_cov" -t "HLA" -d "$ref_dir"
+rm "${param_o}.Nuc.txt"
+rm "${param_o}.coverage.txt"
+
+
+if test -e "${param_o}.candidate.csv"; then
+	Rscript  code/BayesianProbability.R -i "${param_o}" -e "$param_er" -p "$param_p" -s "$param_p1" 
+else
+	echo "No HLA types were detected based on the provided conditions."
+fi
+
+
+if test -e "${param_o}.candidate.csv"; then
+	if [[ "$param_pt" == "true" ]]; then
+		echo "....................phylogenetic tree...................."
+		Rscript code/draw_graphic.R -i "$param_o" 
+	fi
+	if [[ "$param_dv" == "dvr" ]]; then
+		echo "....................diversity anlysis based on the number of unique reads...................."
+		Rscript code/Diversity_demorun_reads.R -i "$param_o"
+	fi
+
+	if [[ "$param_dv" == "dve" ]]; then
+		echo "....................diversity anlysis based on gene expression...................."
+		Rscript code/Diversity_demorun_exp.R -i "$param_o"
+	fi
+	
+fi

@@ -1,0 +1,6 @@
+"Genetype","Pro","Number","PL","Normalized_PL","Type","gene","Sample"
+"HLA-C*16,HLA-C*16",0.816338616877465,"7?7",0.881296587252435,0,"homo","HLA-C","Com_Survey_002.new.bam_output"
+"HLA-A*30,HLA-A*30",0.999978918878913,"16?16",9.15551106488303e-05,0,"homo","HLA-A","Com_Survey_002.new.bam_output"
+"HLA-B*18,HLA-B*18",0.793194582094483,"2?2",1.00620260899546,0,"homo","HLA-B","Com_Survey_002.new.bam_output"
+"HLA-E*01,HLA-E*01",0.99999999999993,"45?45",3.0617397063068e-13,0,"homo","HLA-E","Com_Survey_002.new.bam_output"
+"HLA-F*01,HLA-F*01",0.997662889880723,"9?9",0.0101618195604903,0,"homo","HLA-F","Com_Survey_002.new.bam_output"
