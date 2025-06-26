@@ -328,7 +328,7 @@ fi
 
 
 
-if [[ "$HLA" == "true" && $update_v == "true"]]; then
+if [[ "$HLA" == "true" && $update_v == "true" ]]; then
 	echo "..........update HLA to latest IMGT/HLA version.........."	
 	Rscript  code/update_reference_HLA.R -i $param_rv
 	echo "..........index the latest IMGT/HLA fasta.........."	
