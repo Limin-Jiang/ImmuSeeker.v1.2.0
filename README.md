@@ -113,10 +113,16 @@ sudo docker run -v /your/data/folder:/ImmuSeeker_data -it lxj423/immuseeker -HLA
 
 ##### Example for updating to the latest IMGT-HLA/KIR version.
 ```bash
-./ImmuSeeker -HLA -Update
+./ImmuSeeker -HLA -Update 
 ./ImmuSeeker -KIR -Update
 ```
-The latest HLA/KIR reference files will be stored in /ImmuSeeker/data, replacing the previous reference files for future use.
+If you prefer to install a specific version of the reference, you must first download the HLA_nuc.fasta or kir_nuc.fasta files from the IPD-IMGT/HLA Database. Once downloaded, run the following commands to install the reference files:
+
+```bash
+./ImmuSeeker -HLA -Update -rv '/your/data/folder/HLA_nuc.fasta'
+./ImmuSeeker -KIR -Update -rv '/your/data/folder/kir_nuc.fasta'
+```
+The installed HLA/KIR reference files will be stored in /ImmuSeeker/data, replacing the previous reference files for future use.
 
 ##### This is an example for input a bam file to detect HLA:
 ```bash
