@@ -61,7 +61,7 @@ export PATH=/your/directory/ImmuSeeker:$PATH
 ## Usage
 
 ```bash
-Usage: ImmuSeeker [-HLA | -KIR] [-SwithB | -SwithF | -Update] -i <Parameter1> -v <Parameter2> -c <Parameter3> -n <Parameter4>  -p <Parameter5> -p1 <Parameter6> -o <Parameter7>  -er <Parameter8> -ex <Parameter9> -pt <Parameter10> -dv <Parameter11> -nr <Parameter12>
+Usage: ImmuSeeker [-HLA | -KIR] [-SwithB | -SwithF | -Update] -i <Parameter1> -v <Parameter2> -c <Parameter3> -n <Parameter4>  -p <Parameter5> -p1 <Parameter6> -o <Parameter7>  -er <Parameter8> -ex <Parameter9> -pt <Parameter10> -dv <Parameter11> -nr <Parameter12> -ca <Parameter13> -cov <Parameter14> -r <Parameter15> -q <Parameter16> -rv <Parameter17>
 Options:
     Required:
 	-HLA     Invoke the HLA calling process.
