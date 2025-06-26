@@ -72,9 +72,13 @@ Options:
 	-i       Set the input directory and filename. Example: 'your/input/directory/inputfile.bam'.
 		 If using -SwithF, specify FASTQ file(s) with '-i file1,file2' (two files) or '-i file' (one file).
     Optional:
-	-v       If using -SwithB, specify the genome version with '-v hg37' or '-v hg38'. 	  
-	-c       Specify min number of supported unique reads (default: 5).
-	-n       Max mismatches in alignment (default: 0).
+	-v       If using -SwithB, specify the genome version with '-v hg37' or '-v hg38'.
+	-c       Specify min number of supported unique reads (default: 1).
+	-ca      Specifies the minimum number of supporting reads required for each allele to be considered (default: 100).
+	-cov     Specifies the minimum coverage threshold required for an allele to be retained (default: 98%).
+	-r       Specifies the minimum ratio threshold required between two alleles for both to be retained (default: 50%).
+	-q       Specifies the minimum quality threshold for reads to be included in the analysis (default: 30).
+	-n       Max mismatches in alignment. (default: 0).
 	-p       Set a noninformative flat prior to allow the data to have a strong influence on the posterior distribution. (default: -p '(1/3,1/3,1/3)').
 	-p1      Set the probability of observing an allele in genotype (default: 1/2).
 	-o       Set the output directory and filename. Example: 'your/output/directory/outfile'.
@@ -83,6 +87,7 @@ Options:
 	-dv      Specify whether to output diversity analysis results based on the number of unique reads ('dvr') or gene expression ('dve'). (default:  false).
 	-nr      Specify the type of reads to account for when calculating gene expression. Choose between HLA reads ('HLAn') or total reads ('Totaln'). Calculating using total reads requires more time. (default: 'HLAn').
 	-er      Specify the sequencing error ratio (default: 0.02).
+	-rv      Specify the input HLA/KIR reference file name. (Default: uses the latest available version).
 	--help   Display this help message.
 ```
 ## Example
