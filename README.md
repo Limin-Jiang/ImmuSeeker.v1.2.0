@@ -126,18 +126,18 @@ The installed HLA/KIR reference files will be stored in /ImmuSeeker/data, replac
 
 ##### This is an example for input a bam file to detect HLA:
 ```bash
-./ImmuSeeker -HLA -SwithB -i Example.bam -o Example_output -v hg38
+./ImmuSeeker -HLA -SwithB -i Example.bam -o Example_output -n 0 -c 0 -v hg38 -cov 90 -q 20
 ```
 
 ##### This is an example for input one or two fq file to detect HLA:
 ```bash
-./ImmuSeeker -HLA -SwithF -i Example.fq -er 0.02 -c 0 -o output -ex true -dv dve -pt true
+./ImmuSeeker -HLA -SwithF -i Example.fq -er 0.02 -n 0 -c 0 -o output -ex true -dv dve -pt true
 ```
 
 or
 
 ```bash
-./ImmuSeeker -SwithF -i file1.fq,file2.fq -er 0.02 -c 0 -o output -ex true -dv dve -pt true
+./ImmuSeeker -HLA -SwithF -i file1.fq,file2.fq -er 0.02 -n 0 -c 0 -o output -ex true
 ```
 
 This is an example for detecting KIR:
@@ -149,35 +149,33 @@ This is an example for detecting KIR:
 
 ## Output File Descriptions
 
-Upon completion of the process, you will receive multiple files:
+Upon completion, several output files will be generated, each providing specific information related to HLA/KIR allele detection and analysis:
 
-### output_list.csv: 
+### output.all.csv: 
 
-This file provides information on the detected HLA names, the unique reads supporting them, gene names, and associated levels.
+Contains all potential allele candidates. This file includes detected allele IDs, gene names, the number of unique supporting reads, and associated allele levels. If the -ex true option is enabled, it will also include allele expression values.
+
+### output.candidate.csv: 
+
+Contains the final set of predicted alleles. Similar to output.all.csv, it includes allele IDs, gene names, unique supporting read counts, and allele levels. Expression values are included if -ex true is specified.
 
 ### output_genetype.csv: 
 
-This file contains the inferred zygosity for each gene, determined through Bayesian analysis.
+Reports the inferred zygosity of each gene, estimated using Bayesian modeling.
 
-### output_expression.csv: 
-
-This file presents details on the detected genes, alleles, and protein expression levels.
 
 ### output_diversity_ex.csv/output_diversity_re.csv: 
 
-These files present details on the diversity analysis results based on gene expression or the number of supporting reads.
+Provide results from diversity analysis, either based on gene expression (output_diversity_ex.csv) or read counts (output_diversity_re.csv).
 
 ### output_evolution_graphs.pdf: 
 
-This file presents the phylogenetic tree for detected HLAs.
+Displays phylogenetic trees representing the evolutionary relationships among the detected HLA alleles.
 
-### output.fq: 
-
-This file includes the reads utilized for HLA detection purposes.
 
 ## Additional information
 
-This project also encompasses an analysis of HLA diversity alongside a Contrastive Neural Network-based comparison of HLA haplotype groups. The code implementations and sample datasets are stored within the directory labeled "Example_Analysis_CL_and_diversity."
+This project also includes an analysis of HLA diversity, as well as a comparison of HLA haplotype groups using a Contrastive Neural Network approach. The corresponding code and example datasets are available in the Example_Analysis_CL_and_diversity directory within the original pipeline, accessible at <a href="https://github.com/Limin-Jiang/ImmuSeeker">ImmuSeeker </a>.
 
 
 ## Contact
