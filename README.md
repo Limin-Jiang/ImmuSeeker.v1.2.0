@@ -1,4 +1,4 @@
-# ImmuSeeker
+# ImmuSeeker1.2.0
 This project encompasses all the code utilized in the paper titled "Deep mining of immune-related gene family signatures through lineage reconstruction"
 
 ## Paper Description
