@@ -146,7 +146,7 @@ while [[ "$#" -gt 0 ]]; do
       param_nr="$2"
       shift
       ;;
-	-pv)
+	-rv)
       param_rv="$2"
       shift
       ;;
