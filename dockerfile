@@ -2,31 +2,57 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
-RUN apt-get -y install libssl-dev
-RUN apt-get -y install libcurl4-openssl-dev
-RUN apt-get -y install libfontconfig1-dev
-RUN apt-get -y install libxml2-dev
-RUN apt-get -y install libcairo2-dev 
-RUN apt-get -y install libharfbuzz-dev libfribidi-dev
-RUN apt-get -y install libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
 
+# Install system dependencies required for systemfonts and ggplot-related packages
+RUN apt-get update && apt-get install -y \
+	libcairo2-dev  \
+    libfreetype6-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libpng-dev \
+    libtiff5-dev \
+    libjpeg-dev \
+    libfontconfig1-dev \
+    libxml2-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libgl1-mesa-dev \
+    libxt-dev \
+    build-essential \
+    && apt-get clean
+
+FROM rocker/r-base:4.3.2
+
+
+RUN R -e "install.packages(c('data.table', 'dplyr'))"
+RUN R -e "install.packages(c('docopt'))"
+RUN R -e "install.packages(c('stringr'))"
+RUN apt-get update && apt-get install -y \
+	libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    libgit2-dev \
+    zlib1g-dev \
+    libncurses-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libreadline-dev
+RUN R -e "install.packages('RCurl', repos = 'https://cloud.r-project.org')"
+RUN R -e "install.packages('BiocManager'); BiocManager::install('Biostrings')"
+RUN R -e "install.packages(c('base64enc', 'jsonlite', 'cpp11'), repos = 'https://cloud.r-project.org')"
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libpango1.0-dev \
+    build-essential
+	
+RUN R -e "install.packages('https://cran.r-project.org/src/contrib/systemfonts_1.2.3.tar.gz', repos = NULL, type = 'source')"
+RUN R -e "install.packages(c('ggforce'), repos='https://cloud.r-project.org')"
+RUN R -e "install.packages(c('ggraph'), repos='https://cloud.r-project.org')"
+RUN R -e "install.packages('BiocManager'); BiocManager::install('phyloseq')"
+RUN R -e "install.packages(c('igraph'))"
 
 RUN apt -y install samtools
 RUN apt -y install bowtie
-RUN apt -y install r-base
-
-RUN R -e "install.packages(c('cli', 'glue', 'lifecycle', 'rlang'))"
-RUN R -e "install.packages('https://github.com/r-lib/gtable/archive/refs/tags/v0.3.5.tar.gz', repos = NULL, type = 'source')"
-RUN R -e "install.packages(c('ggplot2', 'ggforce', 'ggrepel', 'viridis'))"
-RUN R -e "install.packages(c('ggraph'))"
-#RUN R -e "install.packages(c('data.table', 'dplyr', 'Biostrings', 'ggraph', 'igraph', 'docopt','stringr'))"
-RUN R -e "install.packages('https://github.com/r-lib/cpp11/archive/refs/tags/v0.5.0.tar.gz', repos = NULL, type = 'source')"
-RUN R -e "install.packages('https://github.com/igraph/rigraph/archive/refs/tags/v2.1.1.tar.gz', repos = NULL, type = 'source')"
-RUN R -e "install.packages(c('data.table', 'dplyr', 'docopt','stringr'))"
-RUN R -e "install.packages('permute', repos='https://cloud.r-project.org/')"
-RUN R -e "install.packages('https://github.com/vegandevs/vegan/archive/refs/tags/v2.6-4.tar.gz', repos = NULL, type = 'source')"
-RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('phyloseq')"
-
 
 # Set the working directory
 WORKDIR /app
