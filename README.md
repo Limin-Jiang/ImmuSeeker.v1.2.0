@@ -20,7 +20,7 @@ Immune gene family signatures, such as HLA and Killer-cell Immunoglobulin-like R
 ### Via docker (Recommended)
 
 ```bash
-docker pull lxj423/immuseeker:latest
+docker pull lxj423/immuseeker1.2.0
 ```
 
 ### Manual installation
@@ -97,16 +97,20 @@ Options:
 cd /your/data/folder/ (that directory includes your data folder/file)
 ##### Example for updating to the latest IMGT-HLA/KIR version.
 ```bash
-sudo docker run -v /your/data/folder:/ImmuSeeker_data -it lxj423/immuseeker -KIR -Update
-sudo docker run -v /your/data/folder:/ImmuSeeker_data -it lxj423/immuseeker -HLA -Update
+docker run -v /your/data/folder:/ImmuSeeker_data -it immuseeker1.2.0 -KIR -Update 
+docker run -v /your/data/folder:/ImmuSeeker_data -it immuseeker1.2.0 -HLA -Update
+```
+If you prefer to install a specific version of the reference, you must first download the hla_nuc.fasta or kir_nuc.fasta files from the IPD-IMGT/HLA Database. Once downloaded, run the following commands to install the reference files:
+```bash
+sudo docker run -v /your/data/folder:/ImmuSeeker_data -it immuseeker1.2.0 -KIR -Update -rv ../ImmuSeeker_data/kirla_nuc.fasta
+sudo docker run -v /your/data/folder:/ImmuSeeker_data -it immuseeker1.2.0 -HLA -Update -rv ../ImmuSeeker_data/hla_nuc.fasta
 ```
 The most recent HLA/KIR reference files will be stored in /your/data/folder for future use.
 
 ##### Next, ensure that your BAM or FASTQ files are stored in /your/data/folder. For example, if Example.bam is located in /your/data/folder, execute the following command:
 ```bash
-sudo docker run -v /your/data/folder:/ImmuSeeker_data -it lxj423/immuseeker -HLA -SwithB -i Example.bam -o Example_output -v hg38 -c 0 -n 0  -p '(1/3,1/3,1/3)' -p1 0.5 -er 0.02 -ex false -pt false -dv dvr -nr HLAn
+sudo docker run -v /your/data/folder:/ImmuSeeker_data -it immuseeker1.2.0 -HLA -SwithB -i bamfile.bam -ca 40  -cov 95 -ex true -pt true -dv dve -q 30
 ```
-
 
 
 #### Example in local
