@@ -49,11 +49,11 @@ To get started with this project, follow these steps:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Limin-Jiang/ImmuSeeker.git
+git clone https://github.com/Limin-Jiang/ImmuSeeker.v1.2.0.git
 
 # Navigate to the project directory
 cd ImmuSeeker
-export PATH=/your/directory/ImmuSeeker:$PATH
+export PATH=/your/directory/ImmuSeeker.v1.2.0:$PATH
 ```
 
 
