@@ -100,8 +100,8 @@ END {
 			
 rm "$param_o.depth.txt"&&
 
-echo "Performing HLA genotype calling..."
-samtools view "$param_o.sam" | grep HLA |cut -d$'\t' -f 3,4,10 > "${param_o}.Nuc.txt"&&
+echo "Performing KIR genotype calling..."
+samtools view "$param_o.sam" | grep KIR |cut -d$'\t' -f 3,4,10 > "${param_o}.Nuc.txt"&&
 rm "$param_o.sam"&&
 
 Rscript  code/BamTocount_demorun.R -i "${param_o}" -c "${param_c}" -x "$param_ex" -q "$param_cov" -t "KIR" -d "$ref_dir"
@@ -111,7 +111,7 @@ rm "${param_o}.coverage.txt"
 if test -e "${param_o}.candidate.csv"; then
 	Rscript  code/BayesianProbability.R -i "${param_o}" -e "$param_er" -p "$param_p" -s "$param_p1" 
 else
-	echo "No HLA types were detected based on the provided conditions."
+	echo "No KIR types were detected based on the provided conditions."
 fi
 
 
