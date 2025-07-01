@@ -18,36 +18,41 @@ ref_dir="data"
 directory=$(dirname "$param_o")
 
 if [[ "$swithB" == "true" ]]; then
-	samtools bam2fq "$param_i" > "$param_o.fq"
-	#rm "$param_i"
+	samtools bam2fq "$param_i" > "$param_o.fq"&&
+	bowtie --sam -v "$param_n" -a "${ref_dir}/kir_nuc"  "$param_o.fq"   "${param_o}.sam"&&
+	rm "$param_o.fq"
 fi
 
 
 if [[ "$swithF" == "true" ]]; then
+
 	if [[ "$param_i" == *.gz ]]; then	
 		if echo "$param_i" | grep -q ','; then	
-			gzip -dc "$f1" > "${f1}.fq"	
-			gzip -dc "$f2" > "${f2}.fq"	
-			cat "${f1}.fq" "${f2}.fq" > "$param_o.fq"&&	
-			rm "${f1}.fq"&&
-			rm "${f2}.fq"&&
+			bowtie --sam -v "$param_n" -a "${ref_dir}/kir_nuc"  -1 "$f1" -2 "$f2" -S "${param_o}.sam"&&
 			echo "User inputs two Fq.gz files"
 		else			
-			gzip -dc "$param_i" > "${param_o}.fq"	
+			bowtie --sam -v "$param_n" -a "${ref_dir}/kir_nuc"  "$param_i"   "${param_o}.sam"&&
 			echo "User inputs one Fq.gz file"
 		fi	
 	
 	else	
 		if echo "$param_i" | grep -q ','; then	
+			bowtie --sam -v "$param_n" -a "${ref_dir}/kir_nuc"  -1 "$f1" -2 "$f2" -S "${param_o}.sam"&&
 			cat "$f1" "$f2" > "${param_o}.fq"&&				
 			echo "User inputs two Fq files"
 		else
-			cp "$param_i" "$param_o.fq"&&
+			bowtie --sam -v "$param_n" -a "${ref_dir}/kir_nuc"  "$param_i"   "${param_o}.sam"&&
 			echo "User inputs one Fq file"
 		fi		
 	fi
 
 fi
+
+samtools view -h -F 4 "${param_o}.sam" -o "${param_o}_mapped.sam"
+rm "$param_o.sam"
+samtools fastq "${param_o}_mapped.sam" > "$param_o.fq"&&
+rm "${param_o}_mapped.sam"
+
 echo "Extracting high-quality reads (≥ ${param_q})..."&&
 awk '{
   if(NR%4==1) id=$0;
