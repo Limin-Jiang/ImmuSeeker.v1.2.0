@@ -39,7 +39,9 @@ if [[ "$swithB" == "true" ]]; then
 		samtools view -b -h -L  data/"$Chrlag"gencode.v39.annotationhg38.gtf.HLA.bed  "$param_i"  >  "$param_o.bam"	
 	fi
 	samtools bam2fq "$param_o.bam" > "$param_o.fq"&&
-	rm "$param_o.bam"
+	bowtie --sam -v "$param_n" -a "${ref_dir}/hla_nuc"  "$param_o.fq"  "${param_o}.sam"&&
+	rm "$param_o.bam"&&
+	rm "$param_o.fq"
 fi
 
 
