@@ -181,6 +181,15 @@ Displays phylogenetic trees representing the evolutionary relationships among th
 
 This project also includes an analysis of HLA diversity, as well as a comparison of HLA haplotype groups using a Contrastive Neural Network approach. The corresponding code and example datasets are available in the Example_Analysis_CL_and_diversity directory within the original pipeline, accessible at <a href="https://github.com/Limin-Jiang/ImmuSeeker">ImmuSeeker </a>.
 
+## Availability of Data 
+
+### RNA-seq for autoimmune disease cohort
+
+RNA-seq for autoimmune disease cohort (MS and NMO) are not publicly available due to participant privacy protections and confidentiality agreements. Access may be granted to qualified researchers for non-commercial research purposes upon review and approval by the Decode Health Data Access Committee. All access requires a Data Use Agreement (DUA) that strictly prohibits re-identification of participants and any onward sharing of data. Researchers interested in accessing the cohort can review the DUA (./DATA_USE_AGREEMENT/Autoimmune_disease_cohort_DecodeHealth_DUA.docx). For questions or to initiate access, please contact Charles F. Spurlock, III (chase@decodehealth.ai). The review and approval process typically requires approximately 30 business days from the date of submission.
+
+### RNA-seq for Native American COVID19 
+
+The access of RNA-seq data of Native American COVID19 is restricted due to IRB and consent agreement. Researchers seeking access must review the DUA  (./DATA_USE_AGREEMENT/COVID19_data_UNM_DUA.pdf). For inquiries or to initiate a data access request, please contact Douglas J. Perkins (dperkins@salud.unm.edu). The review and approval process generally requires approximately 4-6 weeks from the date of submission. 
 
 ## Contact
 
